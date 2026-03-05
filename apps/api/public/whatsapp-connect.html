@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMOBX - Conectar WhatsApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .step-content h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .qr-section {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        #qrCode {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .qr-placeholder {
+            width: 300px;
+            height: 300px;
+            background: #f0f0f0;
+            margin: 0 auto;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .status.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+
+        .vera-info {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .vera-info strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .link-text {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .link-text:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 IMOBX</h1>
+            <p>Conecte seu WhatsApp Business para começar</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Abra WhatsApp Web</h3>
+                    <p>Escaneie o código QR abaixo com seu WhatsApp Business</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Aprove a Conexão</h3>
+                    <p>Confirme a autenticação no seu WhatsApp</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Pronto!</h3>
+                    <p>Seu assistente Vera está ativo e pronto para responder clientes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-section">
+            <h3>Código QR para Conexão</h3>
+            <div id="qrContainer">
+                <div class="qr-placeholder">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="btn-primary" id="loadQrBtn">🔄 Carregar QR Code</button>
+                <button class="btn-secondary" id="refreshQrBtn">🔁 Atualizar</button>
+            </div>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div class="vera-info">
+            <strong>✅ Assistente Vera Status</strong>
+            Pronto para responder clientes via WhatsApp. Latência: ~1.5-2.5s por mensagem.
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        const qrContainer = document.getElementById('qrContainer');
+        const statusDiv = document.getElementById('status');
+        const loadQrBtn = document.getElementById('loadQrBtn');
+        const refreshQrBtn = document.getElementById('refreshQrBtn');
+
+        function showStatus(message, type = 'loading') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        function hideStatus() {
+            statusDiv.className = 'status';
+        }
+
+        async function loadQRCode() {
+            showStatus('Carregando código QR...', 'loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/qr-code`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'ok' && (data.qrcode || data.base64)) {
+                    // Render QR code
+                    const qrImageContent = data.base64 || data.qrcode;
+
+                    if (qrImageContent) {
+                        const isBase64 = qrImageContent.startsWith('data:') || !qrImageContent.startsWith('http');
+
+                        qrContainer.innerHTML = `
+                            <img id="qrCode" src="${isBase64 ? qrImageContent : 'data:image/png;base64,' + qrImageContent}" alt="QR Code">
+                        `;
+                        showStatus('✅ Código QR carregado com sucesso!', 'success');
+                    } else {
+                        qrContainer.innerHTML = '<div class="qr-placeholder">Nenhum código QR disponível. Tente novamente.</div>';
+                        showStatus('⚠️ Nenhum código QR gerado. Tente novamente.', 'error');
+                    }
+                } else {
+                    qrContainer.innerHTML = '<div class="qr-placeholder">Erro ao carregar QR Code</div>';
+                    showStatus(`❌ ${data.error || 'Erro ao carregar código QR'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error loading QR code:', error);
+                qrContainer.innerHTML = '<div class="qr-placeholder">Erro ao carregar</div>';
+                showStatus(`❌ Erro: ${error instanceof Error ? error.message : 'Falha ao carregar código QR'}`, 'error');
+            }
+        }
+
+        async function refreshQRCode() {
+            showStatus('Atualizando código QR...', 'loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/qr-code/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'ok' && (data.qrcode || data.base64)) {
+                    const qrImageContent = data.base64 || data.qrcode;
+
+                    if (qrImageContent) {
+                        const isBase64 = qrImageContent.startsWith('data:') || !qrImageContent.startsWith('http');
+
+                        qrContainer.innerHTML = `
+                            <img id="qrCode" src="${isBase64 ? qrImageContent : 'data:image/png;base64,' + qrImageContent}" alt="QR Code">
+                        `;
+                        showStatus('✅ Código QR atualizado!', 'success');
+                    } else {
+                        showStatus('⚠️ Nenhum código QR gerado.', 'error');
+                    }
+                } else {
+                    showStatus(`❌ ${data.error || 'Erro ao atualizar'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error refreshing QR code:', error);
+                showStatus(`❌ Erro: ${error instanceof Error ? error.message : 'Falha ao atualizar'}`, 'error');
+            }
+        }
+
+        // Event listeners
+        loadQrBtn.addEventListener('click', loadQRCode);
+        refreshQrBtn.addEventListener('click', refreshQRCode);
+
+        // Load QR code on page load
+        window.addEventListener('load', loadQRCode);
+    </script>
+</body>
+</html>
